@@ -316,7 +316,7 @@ func (c *Controller) runMeasurements(run *v1alpha1.AnalysisRun, tasks []metricTa
 	for _, task := range tasks {
 		wg.Add(1)
 
-		go func(t metricTask) error {
+		go func(t metricTask) {
 			defer wg.Done()
 			//redact secret values from logs
 			logger := logutil.WithRedactor(*logutil.WithAnalysisRun(run).WithField("metric", t.metric.Name), secrets)
@@ -411,7 +411,6 @@ func (c *Controller) runMeasurements(run *v1alpha1.AnalysisRun, tasks []metricTa
 			resultsLock.Lock()
 			analysisutil.SetResult(run, *metricResult)
 			resultsLock.Unlock()
-			return nil
 		}(task)
 	}
 	wg.Wait()
