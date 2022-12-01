@@ -1,8 +1,10 @@
 package ingress
 
 import (
+	"context"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/argoproj/argo-rollouts/utils/queue"
 
@@ -132,7 +134,7 @@ func underlyingControllerBuilder(t *testing.T, ing []*extensionsv1beta1.Ingress,
 		MetricsServer: metrics.NewMetricsServer(metrics.ServerConfig{
 			Addr:               "localhost:8080",
 			K8SRequestProvider: &metrics.K8sRequestsCountProvider{},
-		}, true),
+		}),
 	})
 	enqueuedObjects := map[string]int{}
 	var enqueuedObjectsLock sync.Mutex
@@ -168,7 +170,7 @@ func underlyingControllerBuilder(t *testing.T, ing []*extensionsv1beta1.Ingress,
 func TestSyncMissingIngress(t *testing.T) {
 	ctrl, _, _ := newFakeIngressController(t, nil, nil)
 
-	err := ctrl.syncIngress("default/test-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-ingress")
 	assert.NoError(t, err)
 }
 
@@ -177,7 +179,7 @@ func TestSyncIngressNotReferencedByRollout(t *testing.T) {
 
 	ctrl, kubeclient, _ := newFakeIngressController(t, ing, nil)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
@@ -222,7 +224,7 @@ func TestSyncIngressReferencedByRollout(t *testing.T) {
 
 	ctrl, kubeclient, enqueuedObjects := newFakeIngressController(t, ing, rollout)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
@@ -254,7 +256,7 @@ func TestSkipIngressWithNoClass(t *testing.T) {
 
 	ctrl, kubeclient, enqueuedObjects := newFakeIngressController(t, ing, rollout)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
@@ -334,4 +336,17 @@ func TestSyncIngressReferencedByRolloutMultiIngress(t *testing.T) {
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
 	assert.Equal(t, 1, enqueuedObjects["default/rollout"])
+}
+
+func TestRun(t *testing.T) {
+	// make sure we can start and top the controller
+	c, _, _ := newFakeIngressController(t, nil, nil)
+	ctx, cancel := context.WithCancel(context.TODO())
+	defer cancel()
+	go func() {
+		time.Sleep(1000 * time.Millisecond)
+		c.ingressWorkqueue.ShutDownWithDrain()
+		cancel()
+	}()
+	c.Run(ctx, 1)
 }
