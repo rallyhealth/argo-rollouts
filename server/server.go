@@ -110,36 +110,6 @@ func (s *ArgoRolloutsServer) newHTTPServer(ctx context.Context, port int) *http.
 	return &httpS
 }
 
-func (s *ArgoRolloutsServer) readIndexHtml() ([]byte, error) {
-	file, err := static.Open("static/index.html")
-	if err != nil {
-		log.Errorf("Failed to open file %s: %v", "static/index.html", err)
-		return nil, err
-	}
-	defer func() {
-		if file != nil {
-			if err := file.Close(); err != nil {
-				log.Errorf("Error closing file: %v", err)
-			}
-		}
-	}()
-
-	stat, err := file.Stat()
-	if err != nil {
-		log.Errorf("Failed to stat file or dir %s: %v", "static/index.html", err)
-		return nil, err
-	}
-
-	fileBytes := make([]byte, stat.Size())
-	_, err = file.Read(fileBytes)
-	if err != nil {
-		log.Errorf("Failed to read file %s: %v", "static/index.html", err)
-		return nil, err
-	}
-
-	return withRootPath(fileBytes, s.Options.RootPath), nil
-}
-
 func (s *ArgoRolloutsServer) newGRPCServer() *grpc.Server {
 	grpcS := grpc.NewServer()
 	var rolloutsServer rollout.RolloutServiceServer = NewServer(s.Options)
