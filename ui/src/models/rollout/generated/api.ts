@@ -774,19 +774,6 @@ export interface GithubComArgoprojArgoRolloutsPkgApisRolloutsV1alpha1MangedRoute
     name?: string;
 }
 /**
- * 
- * @export
- * @interface GithubComArgoprojArgoRolloutsPkgApisRolloutsV1alpha1MangedRoutes
- */
-export interface GithubComArgoprojArgoRolloutsPkgApisRolloutsV1alpha1MangedRoutes {
-    /**
-     * 
-     * @type {string}
-     * @memberof GithubComArgoprojArgoRolloutsPkgApisRolloutsV1alpha1MangedRoutes
-     */
-    name?: string;
-}
-/**
  * MeasurementRetention defines the settings for retaining the number of measurements during the analysis.
  * @export
  * @interface GithubComArgoprojArgoRolloutsPkgApisRolloutsV1alpha1MeasurementRetention
