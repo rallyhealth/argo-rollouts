@@ -193,7 +193,7 @@ func TestSyncIngressNotReferencedByRolloutMultiIngress(t *testing.T) {
 
 	ctrl, kubeclient, _ := newFakeIngressControllerMultiIngress(t, ings, nil)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
@@ -295,7 +295,7 @@ func TestSkipIngressWithNoClassMultiIngress(t *testing.T) {
 
 	ctrl, kubeclient, enqueuedObjects := newFakeIngressControllerMultiIngress(t, ings, rollout)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
@@ -331,7 +331,7 @@ func TestSyncIngressReferencedByRolloutMultiIngress(t *testing.T) {
 
 	ctrl, kubeclient, enqueuedObjects := newFakeIngressControllerMultiIngress(t, ings, rollout)
 
-	err := ctrl.syncIngress("default/test-stable-ingress")
+	err := ctrl.syncIngress(context.Background(), "default/test-stable-ingress")
 	assert.NoError(t, err)
 	actions := kubeclient.Actions()
 	assert.Len(t, actions, 0)
