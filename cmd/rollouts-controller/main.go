@@ -20,6 +20,8 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
+	"github.com/argoproj/pkg/kubeclientmetrics"
+
 	"github.com/argoproj/argo-rollouts/controller"
 	"github.com/argoproj/argo-rollouts/controller/metrics"
 	jobprovider "github.com/argoproj/argo-rollouts/metricproviders/job"
@@ -32,7 +34,6 @@ import (
 	logutil "github.com/argoproj/argo-rollouts/utils/log"
 	"github.com/argoproj/argo-rollouts/utils/tolerantinformer"
 	"github.com/argoproj/argo-rollouts/utils/version"
-	"github.com/argoproj/pkg/kubeclientmetrics"
 )
 
 const (
@@ -87,7 +88,7 @@ func newCommand() *cobra.Command {
 			log.WithField("version", version.GetVersion()).Info("Argo Rollouts starting")
 
 			// set up signals so we handle the first shutdown signal gracefully
-			stopCh := signals.SetupSignalHandler()
+			ctx := signals.SetupSignalHandlerContext()
 
 			defaults.SetVerifyTargetGroup(awsVerifyTargetGroup)
 			defaults.SetIstioAPIVersion(istioVersion)
@@ -189,23 +190,16 @@ func newCommand() *cobra.Command {
 				healthzPort,
 				k8sRequestProvider,
 				nginxIngressClasses,
-				albIngressClasses)
-			// notice that there is no need to run Start methods in a separate goroutine. (i.e. go kubeInformerFactory.Start(stopCh)
-			// Start method is non-blocking and runs all registered informers in a dedicated goroutine.
-			dynamicInformerFactory.Start(stopCh)
-			if !namespaced {
-				clusterDynamicInformerFactory.Start(stopCh)
-			}
-			kubeInformerFactory.Start(stopCh)
-			controllerNamespaceInformerFactory.Start(stopCh)
-			jobInformerFactory.Start(stopCh)
+				albIngressClasses,
+				dynamicInformerFactory,
+				clusterDynamicInformerFactory,
+				istioDynamicInformerFactory,
+				namespaced,
+				kubeInformerFactory,
+				controllerNamespaceInformerFactory,
+				jobInformerFactory)
 
-			// Check if Istio installed on cluster before starting dynamicInformerFactory
-			if istioutil.DoesIstioExist(istioPrimaryDynamicClient, namespace) {
-				istioDynamicInformerFactory.Start(stopCh)
-			}
-
-			if err = cm.Run(rolloutThreads, serviceThreads, ingressThreads, experimentThreads, analysisThreads, electOpts, stopCh); err != nil {
+			if err = cm.Run(ctx, rolloutThreads, serviceThreads, ingressThreads, experimentThreads, analysisThreads, electOpts); err != nil {
 				log.Fatalf("Error running controller: %s", err.Error())
 			}
 			return nil
