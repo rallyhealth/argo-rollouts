@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://argoproj.github.io/argo-rollouts/features/specification/">
+        <link rel="canonical" href="https://argo-rollouts.readthedocs.io/features/specification/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
@@ -786,6 +786,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../traffic-management/apisix/" class="md-nav__link">
+        APISIX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../traffic-management/alb/" class="md-nav__link">
         AWS ALB
       </a>
@@ -1217,6 +1231,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../generated/notification-services/newrelic/" class="md-nav__link">
+        NewRelic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../generated/notification-services/opsgenie/" class="md-nav__link">
         Opsgenie
       </a>
@@ -1233,6 +1261,20 @@
     <li class="md-nav__item">
       <a href="../../generated/notification-services/overview/" class="md-nav__link">
         Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/notification-services/pagerduty/" class="md-nav__link">
+        Pagerduty
       </a>
     </li>
   
@@ -1303,6 +1345,20 @@
     <li class="md-nav__item">
       <a href="../../generated/notification-services/telegram/" class="md-nav__link">
         Telegram
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generated/notification-services/webex/" class="md-nav__link">
+        Webex Teams
       </a>
     </li>
   
@@ -1962,7 +2018,7 @@
   
     <li class="md-nav__item">
       <a href="../../roadmap/" class="md-nav__link">
-        Roadmap
+        Roadmap/Release Schedule
       </a>
     </li>
   
@@ -2352,6 +2408,11 @@
 <span class="w">      </span><span class="c1"># This value is ignored with basic, replica-weighted canary without</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># traffic routing.</span><span class="w"></span>
 <span class="w">      </span><span class="nt">scaleDownDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1"># The minimum number of pods that will be requested for each ReplicaSet</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># when using traffic routed canary. This is to ensure high availability</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># of each ReplicaSet. Defaults to 1. +optional</span><span class="w"></span>
+<span class="w">      </span><span class="nt">minPodsPerReplicaSet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
 
 <span class="w">      </span><span class="c1"># Limits the number of old RS that can run at one time before getting</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># scaled down. Defaults to nil</span><span class="w"></span>

@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://argoproj.github.io/argo-rollouts/releasing/">
+        <link rel="canonical" href="https://argo-rollouts.readthedocs.io/releasing/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
@@ -743,6 +743,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../features/traffic-management/apisix/" class="md-nav__link">
+        APISIX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../features/traffic-management/alb/" class="md-nav__link">
         AWS ALB
       </a>
@@ -1174,6 +1188,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../generated/notification-services/newrelic/" class="md-nav__link">
+        NewRelic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../generated/notification-services/opsgenie/" class="md-nav__link">
         Opsgenie
       </a>
@@ -1190,6 +1218,20 @@
     <li class="md-nav__item">
       <a href="../generated/notification-services/overview/" class="md-nav__link">
         Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generated/notification-services/pagerduty/" class="md-nav__link">
+        Pagerduty
       </a>
     </li>
   
@@ -1260,6 +1302,20 @@
     <li class="md-nav__item">
       <a href="../generated/notification-services/telegram/" class="md-nav__link">
         Telegram
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generated/notification-services/webex/" class="md-nav__link">
+        Webex Teams
       </a>
     </li>
   
@@ -1919,7 +1975,7 @@
   
     <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
-        Roadmap
+        Roadmap/Release Schedule
       </a>
     </li>
   
@@ -2151,6 +2207,9 @@
 <p>Visit the <a href="https://github.com/argoproj/argo-rollouts/actions/workflows/release.yaml">Release GitHub Action</a>
    and enter the tag.</p>
 </li>
+<li>
+<p>To automatically update the stable tag, select <code>Update stable tag</code>. (false by default)</p>
+</li>
 </ol>
 <p><a href="../release-action.png"><img alt="GitHub Release Action" src="../release-action.png" /></a></p>
 <ol>
@@ -2158,11 +2217,6 @@
 <li>Getting started (copy from previous release and new version)</li>
 <li>
 <p>Changelog</p>
-</li>
-<li>
-<p>Update <code>stable</code> tag:</p>
-<div class="highlight"><pre><span></span><code>git tag stable --force <span class="o">&amp;&amp;</span> git push <span class="nv">$REPO</span> stable --force
-</code></pre></div>
 </li>
 <li>
 <p>Update Brew formula:</p>
@@ -2192,7 +2246,7 @@
 <h3 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
-<p>Install locally using the command below and follow the <a href="https://argoproj.github.io/argo-rollouts/getting-started/">Getting Started Guide</a>:</p>
+<p>Install locally using the command below and follow the <a href="https://argo-rollouts.readthedocs.io/en/stable/getting-started/">Getting Started Guide</a>:</p>
 <div class="highlight"><pre><span></span><code>kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/download/<span class="si">${</span><span class="nv">VERSION</span><span class="si">}</span>/install.yaml
 </code></pre></div>
 </li>
