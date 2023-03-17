@@ -17,3 +17,6 @@ done
 
 docker rm -v ${container_id}
 rm -f ${rollout_iid_file}
+
+cd ${SRCROOT}/dist/
+shasum -a 256 kubectl-argo-rollouts-* > argo-rollouts-checksums.txt
